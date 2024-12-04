@@ -1,0 +1,192 @@
+/* General Styles */
+/* Full Page Gradient Background */
+.spin-page {
+  display: flex;
+  background-image: url('/bg.jpeg');
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 92vh;
+  text-align: center;
+  padding: 2rem;
+  color: rgb(47, 0, 255); /* Text contrast against gradient */
+}
+
+.company-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1605fd;
+  margin-bottom: 2rem;
+}
+
+/* Spinner Styles */
+.spinner {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 16px solid #ff0000; /* red */
+  background-color: rgb(242, 245, 44);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 3s ease-out;
+}
+
+/* Spinner spinning animation */
+.spinning {
+  transform: rotate(2700deg); /* Spins 3 full rotations */
+}
+
+/* Wheel Sections */
+.wheel-section {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.wheel-section:nth-child(1) {
+  transform: rotate(0deg) translate(0, -60px);
+}
+
+.wheel-section:nth-child(2) {
+  transform: rotate(90deg) translate(0, -60px); /* 90 degrees */
+}
+
+.wheel-section:nth-child(3) {
+  transform: rotate(180deg) translate(0, -60px);
+}
+
+.wheel-section:nth-child(4) {
+  transform: rotate(270deg) translate(0, -60px);
+}
+
+.wheel-section span {
+  transform: rotate(-0deg); /* Keeps text upright */
+}
+
+/* Anchor Container */
+.anchor-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform: translate(-50%, -50%) rotate(0deg); /* Centered anchor */
+  transition: transform 3s ease-out;
+}
+
+.wheel-anchor {
+  width: 30px;
+  height: 30px;
+  object-fit: contain; /* Ensures it's centered vertically */
+}
+
+/* Spin Button */
+.spin-button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 1.25rem;
+  color: rgb(252, 252, 252);
+  background-color: #2563eb;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.spin-button:hover {
+  background-color: #1e40af;
+  transform: scale(1.05);
+}
+
+.spin-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Result Section */
+.result {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: #000000;
+}
+
+.result strong {
+  color: #000000;
+}
+
+/* Winners Table */
+.winners-table {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  border-collapse: collapse;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.winners-table th,
+.winners-table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.winners-table th {
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+}
+
+.winners-table tr:nth-child(even) {
+  background-color: #f3f4f6;
+}
+
+.winners-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Footer */
+footer {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Gradient Background for Logo */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.gradient-background {
+  display: inline-block;
+  padding: 1rem;
+  border-radius: 50%; /* Makes the gradient circular */
+  background: linear-gradient(135deg, #fda28b, #3d6ef5); /* Gradient colors */
+}
+
+.logo {
+  width: 60px; /* Adjust the size as needed */
+  height: auto;
+  border-radius: 50%; /* Ensures the image stays circular */
+}
+
+.company-logo {
+  width: 150px; /* Adjust to desired size */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 0.5rem;
+}
