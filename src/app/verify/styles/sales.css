@@ -1,92 +1,68 @@
-/* Sales Page Styles */
-.sales-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-image: url('/bg.jpeg');
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .sales-header {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #001aff;
-    margin-bottom: 2rem;
-  }
-  
-  /* Verification Section */
-  .verification-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .code-input {
-    width: 300px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .verify-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    color: white;
-    background-color: #2563eb;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .verify-button:hover {
-    background-color: #1e40af;
-    transform: scale(1.05);
-  }
-  
-  /* Verification Result */
-  .verification-result {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #2563eb;
-    margin-bottom: 2rem;
-  }
-  
-  /* Verified Codes Table */
-  .verified-table {
-    width: 100%;
-    max-width: 600px;
-    background-color: white;
-    border-collapse: collapse;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-  
-  .verified-table th,
-  .verified-table td {
-    padding: 1rem;
-    text-align: center;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .verified-table th {
-    background-color: #2563eb;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .verified-table tr:nth-child(even) {
-    background-color: #f3f4f6;
-  }
-  
-  .verified-table tr:last-child td {
-    border-bottom: none;
-  }
+.verify-page {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.search-bar-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.search-bar {
+  padding: 10px;
+  width: 300px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.search-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin: 10px 0;
+}
+
+.search-result {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.redeem-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.redeem-button:hover {
+  background-color: #218838;
+}

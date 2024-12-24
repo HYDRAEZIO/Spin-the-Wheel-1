@@ -1,45 +1,31 @@
+// SpinPage.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Spinner from "./components/Spinner"; // Assuming the path to Spinner.tsx is correct
 import "./styles/spin.css";
-import Spinner from "./components/Spinner";
-
-// Define PrizeType as a union of the available prizes
-type PrizeType = "2%" | "3%" | "4%" | "5%";
 
 const SpinPage = () => {
-  const prizes: PrizeType[] = ["2%", "3%", "4%", "5%"];
+  const prizes = ["2%", "3%", "4%", "5%"]; // Define prize options
   const [isSpinning, setIsSpinning] = useState(false);
-  const [selectedPrize, setSelectedPrize] = useState<PrizeType | "">(""); // State for selected prize
+  const [selectedPrize, setSelectedPrize] = useState<string>("");
   const [uniqueCode, setUniqueCode] = useState<string>("");
-  const [winners, setWinners] = useState<{ code: string; prize: string }[]>([]);
+  const [showModal, setShowModal] = useState(false);
 
-  // Fetch recent winners from the backend on component mount
-  useEffect(() => {
-    const fetchWinners = async () => {
-      try {
-        const response = await fetch("/api/spin-result");
-        if (response.ok) {
-          const data = await response.json();
-          setWinners(data || []); // Set winners data
-        } else {
-          console.error("Failed to fetch winners:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching winners:", error);
-      }
-    };
-
-    fetchWinners();
-  }, []); // Empty array means this effect runs only once on mount
+  const generateRandomCode = () => {
+    const min = 1;
+    const max = 1500;
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomNumber.toString().padStart(5, "0");
+  };
 
   const handleSpin = async () => {
-    if (isSpinning) return; // Prevent spinning if already in progress
+    if (isSpinning) return;
 
     setIsSpinning(true);
-    const prizeIndex = Math.floor(Math.random() * prizes.length); // Random prize index
+    const prizeIndex = Math.floor(Math.random() * prizes.length);
     const prize = prizes[prizeIndex];
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase(); // Generate unique code
+    const code = generateRandomCode();
 
     setTimeout(async () => {
       try {
@@ -48,79 +34,61 @@ const SpinPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ code, prize }), // Send spin result
+          body: JSON.stringify({ code, prize }),
         });
 
         if (response.ok) {
-          const savedWinner = await response.json(); // Get saved winner data
-          setSelectedPrize(savedWinner.prize);
-          setUniqueCode(savedWinner.code);
-          setWinners((prev) => [savedWinner, ...prev].slice(0, 3)); // Keep last 3 winners
+          const data = await response.json();
+          setSelectedPrize(data.prize);
+          setUniqueCode(data.code);
+          setShowModal(true);
         } else {
           console.error("Failed to save spin result");
         }
       } catch (error) {
-        console.error("Error saving spin result:", error);
+        const err = error as Error;
+        console.error("Error saving spin result:", err.message);
       } finally {
         setIsSpinning(false);
       }
-    }, 3000); // Simulate spin duration with a 3-second delay
+    }, 3000); // Simulate spin duration
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (
     <div className="spin-page">
-      {/* Company Logo and Header */}
       <div className="logo-container">
         <img src="/logo.png" alt="Company Logo" className="company-logo" />
-        <h1 className="company-header">Shree Aadinath Mercantile and Exports Pvt Ltd</h1>
+        <img src="/logo-name.png" alt="Company Name" className="company-name" />
       </div>
 
-      {/* Spinner and Spin Button */}
       <div className="spinner-container">
-        <Spinner isSpinning={isSpinning} selectedPrize={selectedPrize as PrizeType} />
-        <button
-          className="spin-button"
-          onClick={handleSpin}
-          disabled={isSpinning}
-        >
-          {isSpinning ? "Spinning..." : "Spin the Wheel"}
-        </button>
+        <div className="wheel">
+          <button
+            className="spin-button-inside"
+            onClick={handleSpin}
+            disabled={isSpinning}
+          >
+            {isSpinning ? "Spinning..." : "SPIN"}
+          </button>
+        </div>
       </div>
 
-      {/* Display Result after Spin */}
-      {selectedPrize && uniqueCode && (
-        <div className="result">
-          <h2>Congratulations!</h2>
-          <p>
-            You won: <strong>{selectedPrize}</strong>
-          </p>
-          <p>
-            Your code: <strong>{uniqueCode}</strong>
-          </p>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Congratulations!</h2>
+            <p>You won: <strong>{selectedPrize}</strong></p>
+            <p>Your unique number: <strong>{uniqueCode}</strong></p>
+            <button className="close-button" onClick={closeModal}>Close</button>
+          </div>
         </div>
       )}
 
-      {/* Recent Winners Table */}
-      {winners.length > 0 && (
-        <table className="winners-table">
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Prize</th>
-            </tr>
-          </thead>
-          <tbody>
-            {winners.map((winner, index) => (
-              <tr key={index}>
-                <td>{winner.code}</td>
-                <td>{winner.prize}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      <footer>© 2024 Shree Aadinath Mercantile and Exports Pvt Ltd</footer>
+      <footer>© 2024 My Mobile App</footer>
     </div>
   );
 };

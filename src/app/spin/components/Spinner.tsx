@@ -1,50 +1,35 @@
-import React, { useEffect, useState } from "react";
-import "../styles/spin.css";
+import React from "react";
+import "../styles/spin.css"; // Assuming path is correct
 
-// Define the allowed prize types
-type PrizeType = "2%" | "3%" | "4%" | "5%";
+interface SpinnerProps {
+  isSpinning: boolean;
+  selectedPrize: string;
+}
 
-const Spinner = ({ isSpinning, selectedPrize }: { isSpinning: boolean; selectedPrize: PrizeType }) => {
-  // Define the angles corresponding to each prize
-  const prizeAngles: Record<PrizeType, number> = {
-    "2%": 0,   // 0 degrees for the first prize
-    "3%": 90,  // 90 degrees for the second prize
-    "4%": 180, // 180 degrees for the third prize
-    "5%": 270  // 270 degrees for the fourth prize
-  };
-
-  const [anchorRotation, setAnchorRotation] = useState(0);
-
-  useEffect(() => {
-    if (selectedPrize) {
-      // Set the anchor rotation based on the selected prize
-      setAnchorRotation(prizeAngles[selectedPrize]);
-    }
-  }, [selectedPrize]);
-
+const Spinner: React.FC<SpinnerProps> = ({ isSpinning, selectedPrize }) => {
   return (
     <div className={`spinner ${isSpinning ? "spinning" : ""}`}>
-      {/* Wheel Sections */}
       <div className="wheel-section">
-        <span>2%</span>
+        <span></span>
       </div>
       <div className="wheel-section">
-        <span>3%</span>
+        <span></span>
       </div>
       <div className="wheel-section">
-        <span>4%</span>
+        <span></span>
       </div>
       <div className="wheel-section">
-        <span>5%</span>
+        <span></span>
       </div>
 
-      {/* Anchor at the selected prize position */}
-      {/* <div
-        className="anchor-container"
-        style={{ transform: `translate(-50%, -50%) rotate(${anchorRotation}deg)` }}
-      >
-        <img src="/anchor.png" alt="Anchor" className="wheel-anchor" />
-      </div> */}
+      <div className="spinner-button-container">
+        <button
+          className="spin-button-inside"
+          onClick={(e) => e.stopPropagation()} // Prevent triggering the parent's click
+        >
+          {isSpinning ? "Spinning..." : "SPIN"}
+        </button>
+      </div>
     </div>
   );
 };

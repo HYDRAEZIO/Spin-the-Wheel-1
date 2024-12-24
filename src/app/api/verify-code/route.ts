@@ -3,24 +3,66 @@ import dbConnect from "../../../utils/dbConnect";
 import Code from "../../../models/Code";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url!);
-  const code = searchParams.get("code");
-
-  if (!code) {
-    return NextResponse.json({ error: "Code is required" }, { status: 400 });
-  }
-
   try {
-    await dbConnect();
-    const foundCode = await Code.findOne({ code: code.toUpperCase() });
+    const { searchParams } = new URL(req.url);
+    const code = searchParams.get("code");
 
-    if (!foundCode) {
+    if (!code) {
+      return NextResponse.json({ error: "Code is required" }, { status: 400 });
+    }
+
+    await dbConnect();
+    const existingCode = await Code.findOne({ code });
+
+    if (!existingCode) {
       return NextResponse.json({ error: "Code not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ prize: foundCode.prize });
+    return NextResponse.json(existingCode, { status: 200 });
   } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({ error: "Failed to verify code", details: err.message }, { status: 500 });
+    console.error("Error in GET verify-code:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { code, redeem } = await req.json();
+
+    if (!code) {
+      return NextResponse.json({ error: "Code is required" }, { status: 400 });
+    }
+
+    await dbConnect();
+    const existingCode = await Code.findOne({ code });
+
+    if (!existingCode) {
+      return NextResponse.json({ error: "Code not found" }, { status: 404 });
+    }
+
+    if (redeem) {
+      if (existingCode.redeemed) {
+        return NextResponse.json(
+          { error: "Code already redeemed" },
+          { status: 400 }
+        );
+      }
+
+      existingCode.redeemed = true;
+      await existingCode.save();
+
+      return NextResponse.json({ message: "Code redeemed successfully", code });
+    }
+
+    return NextResponse.json({ code: existingCode });
+  } catch (error) {
+    console.error("Error in POST verify-code:", error);
+    return NextResponse.json(
+      { error: "Internal server error", details: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -3,81 +3,104 @@
 import React, { useState } from "react";
 import "./styles/sales.css";
 
-const SalesVerificationPage = () => {
-  const [inputCode, setInputCode] = useState("");
-  const [verificationResult, setVerificationResult] = useState("");
-  const [verifiedCodes, setVerifiedCodes] = useState<{ code: string; prize: string }[]>([]);
+const VerifyPage = () => {
+  const [searchCode, setSearchCode] = useState<string>(""); // Input value for searching
+  const [searchResult, setSearchResult] = useState<any>(null); // Store the search result
+  const [errorMessage, setErrorMessage] = useState<string>(""); // Store error messages
+  const [successMessage, setSuccessMessage] = useState<string>(""); // Success messages
 
-  const handleVerify = async () => {
-    if (!inputCode) {
-      setVerificationResult("Please enter a code.");
+  // Handle search
+  const handleSearch = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    if (!searchCode) {
+      setErrorMessage("Please enter a code to search.");
       return;
     }
 
     try {
-      // Send a request to the verify-code API
-      const response = await fetch(`/api/verify-code?code=${inputCode.toUpperCase()}`);
-      const data = await response.json();
-
+      const response = await fetch(`/api/verify-code?code=${searchCode}`);
       if (response.ok) {
-        setVerificationResult(`Valid Code! Prize: ${data.prize}`);
-        setVerifiedCodes((prev) => [...prev, { code: inputCode.toUpperCase(), prize: data.prize }].slice(-3)); // Keep last 3 entries
+        const data = await response.json();
+        setSearchResult(data);
       } else {
-        setVerificationResult(data.error || "Invalid Code. Please try again.");
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || "Failed to search code.");
+        setSearchResult(null);
       }
     } catch (error) {
-      setVerificationResult("Failed to verify the code. Please try again later.");
+      console.error("Error searching for code:", error);
+      setErrorMessage("An error occurred while searching.");
+    }
+  };
+
+  // Handle redeeming a searched code
+  const redeemCode = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    if (!searchResult || searchResult.redeemed) {
+      setErrorMessage("Code is already redeemed or invalid.");
+      return;
     }
 
-    setInputCode(""); // Clear the input field
+    try {
+      const response = await fetch("/api/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: searchResult.code, redeem: true }),
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        setSearchResult(updatedData); // Update the result with redeemed status
+        setSuccessMessage("Code redeemed successfully!");
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.error || "Failed to redeem code.");
+      }
+    } catch (error) {
+      console.error("Error redeeming code:", error);
+      setErrorMessage("An error occurred while redeeming the code.");
+    }
   };
 
   return (
-    <div className="sales-page">
-      {/* Header */}
-      <h1 className="sales-header">Sales Team Verification</h1>
+    <div className="verify-page">
+      <h1>Search and Redeem Code</h1>
 
-      {/* Code Input Section */}
-      <div className="verification-container">
+      {/* Search Bar */}
+      <div className="search-bar-container">
         <input
           type="text"
-          value={inputCode}
-          onChange={(e) => setInputCode(e.target.value)}
-          placeholder="Enter Code"
-          className="code-input"
+          placeholder="Enter code to search"
+          value={searchCode}
+          onChange={(e) => setSearchCode(e.target.value)}
+          className="search-bar"
         />
-        <button onClick={handleVerify} className="verify-button">
-          Verify Code
+        <button onClick={handleSearch} className="search-button">
+          Search
         </button>
       </div>
 
-      {/* Display Verification Result */}
-      {verificationResult && <p className="verification-result">{verificationResult}</p>}
-
-      {/* Display Recent Verified Codes */}
-      {verifiedCodes.length > 0 && (
-        <div className="verified-codes-container">
-          <h2>Recent Verified Codes</h2>
-          <table className="verified-table">
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Prize</th>
-              </tr>
-            </thead>
-            <tbody>
-              {verifiedCodes.map((entry, index) => (
-                <tr key={index}>
-                  <td>{entry.code}</td>
-                  <td>{entry.prize}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Display search result */}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {searchResult && (
+        <div className="search-result">
+          <p><strong>Code:</strong> {searchResult.code}</p>
+          <p><strong>Prize:</strong> {searchResult.prize}</p>
+          <p>
+            <strong>Status:</strong> {searchResult.redeemed ? "Redeemed" : "Not Redeemed"}
+          </p>
+          {!searchResult.redeemed && (
+            <button onClick={redeemCode} className="redeem-button">
+              Redeem
+            </button>
+          )}
         </div>
       )}
     </div>
   );
 };
 
-export default SalesVerificationPage;
+export default VerifyPage;
