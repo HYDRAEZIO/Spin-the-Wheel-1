@@ -1,0 +1,202 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+}
+
+.spin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/bgimage.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.company-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1a2a3a;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.company-logo {
+  width: 300px;
+  height: auto;
+  object-fit: contain;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 20px;
+}
+
+.spinner {
+  position: relative;
+  width: 300px; /* Adjust spinner size */
+  height: 300px;
+  border-radius: 50%;
+  background: conic-gradient(
+    rgb(0, 180, 252) 0deg 80deg,      /* Black segment (80°) */
+    white 80deg 120deg,    /* White segment (40°) */
+    red 120deg 200deg,     /* Red segment (80°) */
+    white 200deg 240deg,   /* White segment (40°) */
+    rgb(0, 17, 255) 240deg 320deg,    /* Blue segment (80°) */
+    white 320deg 360deg    /* White segment (40°) */
+  );
+  border: 5px solid #000; /* Optional border for the spinner */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spinWheel 2s linear infinite; /* Optional animation */
+}
+
+.spin-button-inside {
+  position: absolute;
+  width: 100px; /* Adjust button size */
+  height: 100px;
+  border-radius: 50%;
+  background-color: #1e90ff; /* Vibrant blue background */
+  color: #ffd700; /* Gold color for text */
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: bold; /* Bold text */
+  text-transform: uppercase; /* Make text uppercase */
+  font-family: "Times New Roman", Times, serif;
+  border: 2px solid #ffffff; /* White border around the button */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  z-index: 2; /* Ensure button is above spinner */
+}
+
+.spin-button-inside:hover {
+  transform: scale(1.1); /* Slight zoom-in effect on hover */
+  background-color: #8c00ff; /* Change background color to vibrant orange */
+}
+
+.brands-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 40px;
+}
+
+.brand-logo {
+  width: 150px;
+  height: auto;
+  margin: 0 10px;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Spinner Animation */
+.spinner-container .spinner {
+  animation: spinWheel 2s ease-in-out infinite;
+}
+
+@keyframes spinWheel {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-fast {
+  animation-duration: 1s !important; /* Increase speed by reducing duration */
+}
+
+.company-name {
+  width: 700px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Flash Card Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  font-size: 1.5rem;
+  color: #1a2a3a;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.close-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background-color: #0056b3;
+}
+
+.spin-button-inside:disabled {
+  background-color: rgb(255, 0, 0);
+  color: #000000; /* Faded text for disabled state */
+  cursor: not-allowed;
+  border: none;
+  box-shadow: none;
+}
+
+.spinner-container .spinner.spin {
+  animation: spinWheel 1.5s ease-in-out;
+}
